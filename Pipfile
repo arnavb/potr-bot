@@ -9,7 +9,7 @@ mypy = "*"
 black = "==19.3b0"
 
 [packages]
-"discord.py" = "*"
+discord-py = {editable = true,extras = ["voice"],git = "https://github.com/Rapptz/discord.py",ref = "rewrite"}
 
 [requires]
 python_version = "3.7"
