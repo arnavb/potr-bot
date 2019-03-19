@@ -12,4 +12,4 @@ black = "==19.3b0"
 "discord.py" = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
