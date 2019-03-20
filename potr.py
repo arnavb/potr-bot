@@ -6,18 +6,18 @@ from typing import List
 # pylint:disable=invalid-name
 bot = commands.Bot(command_prefix=">>", description="A protector of the realm")
 
+COGS = ["cogs.general"]
+
+
 @bot.event
 async def on_ready():
-    print("Logging in!")
-
-
-@bot.command()
-async def hello(ctx, *names):
-    """Say hello to someone!"""
-    await ctx.send(f"Hello, {' '.join(names)}!")
+    print(f"Logging in as {bot.user.name}#{bot.user.discriminator}")
 
 
 def main(discord_bot_token: str):
+    for cog in COGS:
+        bot.load_extension(cog)
+
     bot.run(discord_bot_token)
 
 
