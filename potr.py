@@ -1,22 +1,26 @@
-import discord
+from discord.ext import commands
 import os
+from typing import List
 
 
-client = discord.Client()
+# pylint:disable=invalid-name
+bot = commands.Bot(command_prefix="!", description="A protector of the realm")
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print("We have logged in as {0.user}".format(client))
+    print("Logging in!")
 
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith("$hello"):
-        await message.channel.send("Hello!")
+@bot.command()
+async def hello(ctx, *names):
+    """Say hello to someone!"""
+    await ctx.send(f"Hello, {' '.join(names)}!")
 
 
-client.run(os.environ["DISCORD_BOT_TOKEN"])
+def main(discord_bot_token: str):
+    bot.run(discord_bot_token)
+
+
+if __name__ == "__main__":
+    main(os.environ["DISCORD_BOT_TOKEN"])
