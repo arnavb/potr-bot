@@ -4,8 +4,7 @@ from typing import List
 
 
 # pylint:disable=invalid-name
-bot = commands.Bot(command_prefix="!", description="A protector of the realm")
-
+bot = commands.Bot(command_prefix=">>", description="A protector of the realm")
 
 @bot.event
 async def on_ready():
