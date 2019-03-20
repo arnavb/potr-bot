@@ -1,25 +1,21 @@
-from discord.ext import commands
 import os
-from typing import List
+
+from discord.ext import commands
 
 
 # pylint:disable=invalid-name
 bot = commands.Bot(command_prefix=">>", description="A protector of the realm")
 
-COGS = ["cogs.general"]
+INITIAL_COGS = ["cogs.general"]
 
 
 @bot.event
 async def on_ready():
     print(f"Logging in as {bot.user.name}#{bot.user.discriminator}")
 
-
-def main(discord_bot_token: str):
-    for cog in COGS:
+    for cog in INITIAL_COGS:
         bot.load_extension(cog)
-
-    bot.run(discord_bot_token)
 
 
 if __name__ == "__main__":
-    main(os.environ["DISCORD_BOT_TOKEN"])
+    bot.run(os.environ["DISCORD_BOT_TOKEN"])
