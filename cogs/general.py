@@ -31,7 +31,8 @@ class General(commands.Cog):
                 cog_commands = self.bot.get_cog(cog).get_commands()
 
                 commands_list = "\n".join(
-                    f"**{command.name}** - {command.short_doc}" for command in cog_commands
+                    f"**{command.name}** - {command.short_doc}"
+                    for command in cog_commands
                 )
 
                 help_embed.add_field(name=cog, value=commands_list, inline=False)
