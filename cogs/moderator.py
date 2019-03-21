@@ -24,6 +24,11 @@ class Moderator(commands.Cog):
             return
 
         muted_role = discord.utils.get(ctx.guild.roles, name="Muted")
+
+        if muted_role in member.roles:
+            await ctx.send(f"{member.name} is already muted!")
+            return
+
         await member.add_roles(muted_role, reason=reason)
 
         output = f"Muted user {member.name}"
@@ -46,6 +51,11 @@ class Moderator(commands.Cog):
             return
 
         muted_role = discord.utils.get(ctx.guild.roles, name="Muted")
+
+        if muted_role not in member.roles:
+            await ctx.send(f"{member.name} is not muted!")
+            return
+
         await member.remove_roles(muted_role)
 
         await ctx.send(f"Unmuted user {member.name}.")
