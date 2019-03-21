@@ -13,11 +13,13 @@ INITIAL_COGS = ["cogs.general", "cogs.moderator"]
 async def on_ready():
     print(f"Logging in as {bot.user.name}#{bot.user.discriminator}")
 
+def main():
     bot.remove_command("help")
 
     for cog in INITIAL_COGS:
         bot.load_extension(cog)
 
+    bot.run(os.environ["DISCORD_BOT_TOKEN"])
 
 if __name__ == "__main__":
-    bot.run(os.environ["DISCORD_BOT_TOKEN"])
+    main()
