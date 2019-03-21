@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 
-class Moderator(commands.Cog):
+class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -69,4 +69,4 @@ class Moderator(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Moderator(bot))
+    bot.add_cog(Moderation(bot))

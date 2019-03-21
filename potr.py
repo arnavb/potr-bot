@@ -6,7 +6,7 @@ from discord.ext import commands
 # pylint:disable=invalid-name
 bot = commands.Bot(command_prefix=">>", description="A protector of the realm")
 
-INITIAL_COGS = ["cogs.general", "cogs.moderator"]
+INITIAL_COGS = ["cogs.general", "cogs.moderation"]
 
 
 @bot.event
