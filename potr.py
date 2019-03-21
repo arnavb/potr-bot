@@ -1,3 +1,4 @@
+from codecs import encode
 import os
 
 from discord.ext import commands
@@ -12,6 +13,13 @@ INITIAL_COGS = ["cogs.general", "cogs.moderation"]
 @bot.event
 async def on_ready():
     print(f"Logging in as {bot.user.name}#{bot.user.discriminator}")
+
+@bot.event
+async def on_message(message: str):
+    if encode("lbh'er nyy tnl", "rot_13") in message.content:
+        await message.channel.send("n0u")
+
+    await bot.process_commands(message)
 
 
 def main():

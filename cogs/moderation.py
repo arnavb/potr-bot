@@ -11,7 +11,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(
-        self, ctx, member: Optional[discord.Member] = None, reason: Optional[str] = None
+        self, ctx, member: Optional[discord.Member] = None, *, reason: Optional[str] = None
     ):
         """Mute a user"""
 
