@@ -16,9 +16,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: str):
-    if encode("lbh'er nyy tnl", "rot_13") in message.content:
-        await message.channel.send("n0u")
-
     await bot.process_commands(message)
 
 
