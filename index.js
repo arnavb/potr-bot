@@ -11,8 +11,19 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
-  if (message.content == `${prefix}hello`) {
-    await message.channel.send(`Hello ${message.author.username}`);
+  if (!message.content.startsWith(prefix) || message.author.bot || message.content.trim().length === prefix.length) {
+    return;
+  }
+
+  const commandArgs = message.content.slice(prefix.length).split(/ +/);
+  const command = commandArgs.shift();
+
+  if(command == 'hello') {
+    if (commandArgs.length === 0) {
+      await message.channel.send(`Hello ${message.author.username}`);
+    } else {
+      await message.channel.send(`Hello ${commandArgs.join(', ')}`);
+    }
   }
 });
 
