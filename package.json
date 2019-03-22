@@ -4,7 +4,8 @@
   "description": "A general purpose Discord bot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "devstart": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,10 @@
     "dotenv": "^7.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "eslint": "^5.15.3",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4"
   }
 }
