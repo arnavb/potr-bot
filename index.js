@@ -1,13 +1,27 @@
+const fs = require('fs');
+
 const Discord = require('discord.js');
 
 require('dotenv').config();
 
 const client = new Discord.Client();
+client.commands = new Discord.Collection();
 
 const prefix = '>>';
 
+const commandGroups = ['general'];
+
+// TODO: Add support for loading commands from directories
+// let allCommands = [];
+
+// for (const group of commandGroups) {
+
+// }
+
 client.once('ready', () => {
-  console.log('Ready!');
+  console.log(
+    `Logging in with ${client.user.username}#${client.user.discriminator}`,
+  );
 });
 
 client.on('message', async message => {
