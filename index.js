@@ -1,43 +1,69 @@
 const fs = require('fs');
+const { promisify } = require('util');
+const readdir = promisify(fs.readdir);
 
 const Discord = require('discord.js');
 
 require('dotenv').config();
 
 const client = new Discord.Client();
-client.commands = new Discord.Collection();
 
 const prefix = '>>';
 
-const commandGroups = ['general'];
+/**
+ * @param {string} commandsDir
+ * @param {Array<string>} commandGroups
+ */
+async function loadAllCommands(commandsDir, commandGroups) {
+  let result = new Discord.Collection();
 
-// TODO: Add support for loading commands from directories
-// let allCommands = [];
+  for (const group of commandGroups) {
+    try {
+      const commandFiles = await readdir(`./${commandsDir}/${group}`);
 
-// for (const group of commandGroups) {
+      for (const file of commandFiles) {
+        const command = require(`./${commandsDir}/${group}/${file}`);
+        result.set(command.name, command);
+      }
+    } catch (err) {
+      console.error(`Unable to load group ${group}. Error: ${err}`);
+    }
+  }
 
-// }
+  return result;
+}
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log(
     `Logging in with ${client.user.username}#${client.user.discriminator}`,
   );
+
+  try {
+    client.commands = await loadAllCommands('commands', [
+      'general',
+      'moderation',
+    ]);
+  } catch (err) {
+    console.error(`Unable to load groups. Error: ${err}`);
+  }
 });
 
 client.on('message', async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot || message.content.trim().length === prefix.length) {
+  if (
+    !message.content.startsWith(prefix) ||
+    message.author.bot ||
+    message.content.trim().length === prefix.length
+  ) {
     return;
   }
 
   const commandArgs = message.content.slice(prefix.length).split(/ +/);
   const command = commandArgs.shift();
 
-  if(command == 'hello') {
-    if (commandArgs.length === 0) {
-      await message.channel.send(`Hello ${message.author.username}`);
-    } else {
-      await message.channel.send(`Hello ${commandArgs.join(', ')}`);
-    }
+  try {
+    await client.commands.get(command).execute(message, commandArgs);
+  } catch (err) {
+      console.error(`An error occurred! ${err}`);
   }
 });
 
