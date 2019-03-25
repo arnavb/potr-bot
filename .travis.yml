@@ -4,3 +4,9 @@ node_js:
 
 script:
   - npm run lint -s
+
+branches:
+  only:
+    - master
+    # Tags
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
