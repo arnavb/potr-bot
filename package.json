@@ -1,0 +1,31 @@
+{
+  "name": "potr-bot",
+  "version": "0.1.0",
+  "description": "A general purpose Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "devstart": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnavb/potr-bot.git"
+  },
+  "author": "Arnav Borborah",
+  "bugs": {
+    "url": "https://github.com/arnavb/potr-bot/issues"
+  },
+  "homepage": "https://github.com/arnavb/potr-bot#readme",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "dotenv": "^7.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.3",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4"
+  }
+}
