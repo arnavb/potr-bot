@@ -90,6 +90,12 @@ client.on('message', async message => {
     return;
   }
 
+  // Filter guild-only commands
+  if (command.guildOnly && message.channel.type !== 'text') {
+    await message.channel.send(`Error! I can't use that command in DMs!`);
+    return;
+  }
+
   // Check if user has required permissions to run the command
   if (
     command.requiredPermissions &&
@@ -98,12 +104,6 @@ client.on('message', async message => {
     await message.channel.send(
       "Error! You don't have permissions to run this command!",
     );
-  }
-
-  // Filter guild-only commands
-  if (command.guildOnly && message.channel.type !== 'text') {
-    await message.channel.send(`Error! I can't use that command in DMs!`);
-    return;
   }
 
   try {
