@@ -37,6 +37,7 @@ module.exports = {
             color: '#808080',
           });
 
+          // eslint-disable-next-line no-unused-vars
           for (const [_, channel] of message.guild.channels) {
             await channel.overwritePermissions(mutedRole, {
               SEND_MESSAGES: false,
