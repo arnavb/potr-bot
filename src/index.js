@@ -6,6 +6,12 @@ const { promisify } = require('util');
 const readdir = promisify(fs.readdir);
 
 /**
+ * @callback executeCallback
+ * @param {Discord.Message} responseCode
+ * @param {Array<string>} responseMessage
+ */
+
+/**
  * Object representing a Discord command
  * @typedef {Object} Command
  * @property {string} name Name of the command
@@ -13,8 +19,9 @@ const readdir = promisify(fs.readdir);
  * @property {string} [usage] Usage string of the command
  * @property {string} group Command category to group this command with
  * @property {Array<string>} [requiredPermissions] Permissions this command requires to execute
- * @property {bool} [guildOnly] Whether this command can be executed outside of guilds
+ * @property {boolean} [guildOnly] Whether this command can be executed outside of guilds
  * @property {Array<string>} [aliases] Any aliases this command has
+ * @property {executeCallback} execute The callback to execute the command
  */
 
 /**
@@ -47,6 +54,8 @@ async function loadAllCommands(commandsDir, commandGroups) {
 }
 
 const client = new Discord.Client();
+/** @type {Discord.Collection<string, Command>} */
+let commands;
 const prefix = '>>';
 
 client.once('ready', async () => {
@@ -55,7 +64,7 @@ client.once('ready', async () => {
   );
 
   try {
-    client.commands = await loadAllCommands('commands', [
+    commands = await loadAllCommands('commands', [
       'general',
       'moderation',
     ]);
@@ -75,13 +84,13 @@ client.on('message', async message => {
   }
 
   const commandArgs = message.content.slice(prefix.length).split(/ +/);
-  const commandName = commandArgs.shift();
+  const commandName = commandArgs.shift() || "";
 
   // Try to get command by primary name, otherwise check aliases
   /** @type {Command} */
   const command =
-    client.commands.get(commandName) ||
-    client.commands.find(
+    commands.get(commandName) ||
+    commands.find(
       command => command.aliases && command.aliases.includes(commandName),
     );
 

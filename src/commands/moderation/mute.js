@@ -38,7 +38,7 @@ module.exports = {
           });
 
           // eslint-disable-next-line no-unused-vars
-          for (const [_, channel] of message.guild.channels) {
+          for (const [, channel] of message.guild.channels) {
             await channel.overwritePermissions(mutedRole, {
               SEND_MESSAGES: false,
               ADD_REACTIONS: false,
