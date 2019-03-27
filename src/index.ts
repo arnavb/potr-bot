@@ -23,9 +23,9 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
   // store all commands in `result`.
   for (const group of commandGroups) {
     try {
-      const commandFiles = await readdir(
+      const commandFiles = (await readdir(
         `${__dirname}/${commandsDir}/${group}`,
-      );
+      )).filter(file => file.endsWith('.js'));
 
       for (const file of commandFiles) {
         const command: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);

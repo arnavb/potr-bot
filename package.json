@@ -4,8 +4,9 @@
   "description": "A general purpose Discord bot",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "devstart": "nodemon src/index.js",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "devstart": "nodemon dist/index.js",
     "lint": "eslint 'src/*.js' --format codeframe"
   },
   "repository": {
@@ -25,7 +26,6 @@
     "dotenv": "^7.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
     "typescript": "^3.3.4000"
   }
