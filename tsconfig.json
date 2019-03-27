@@ -2,10 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es2016"],
     "sourceMap": true,
     "outDir": "./dist",
-    "downlevelIteration": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -18,8 +16,10 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "newLine": "LF",
+    "noEmitOnError": true
   },
   "include": ["./src/**/*"]
 }
