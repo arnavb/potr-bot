@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord from 'discord.js';
 require('dotenv').config();
 
 import fs from 'fs';
@@ -6,16 +6,15 @@ import { promisify } from 'util';
 const readdir = promisify(fs.readdir);
 
 interface Command {
-    name: string;
-    description: string;
-    usage?: string;
-    group: string;
-    requiredPermissions?: string[];
-    guildOnly: boolean;
-    aliases?: string[];
-    execute(message: Discord.Message, commandArgs: string[]): void;
+  name: string;
+  description: string;
+  usage?: string;
+  group: string;
+  requiredPermissions?: string[];
+  guildOnly: boolean;
+  aliases?: string[];
+  execute(message: Discord.Message, commandArgs: string[]): void;
 }
-
 
 async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
   let result = new Discord.Collection<string, Command>();
@@ -24,7 +23,9 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
   // store all commands in `result`.
   for (const group of commandGroups) {
     try {
-      const commandFiles = await readdir(`${__dirname}/${commandsDir}/${group}`);
+      const commandFiles = await readdir(
+        `${__dirname}/${commandsDir}/${group}`,
+      );
 
       for (const file of commandFiles) {
         const command: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
@@ -48,10 +49,7 @@ client.once('ready', async () => {
   );
 
   try {
-    commands = await loadAllCommands('commands', [
-      'general',
-      'moderation',
-    ]);
+    commands = await loadAllCommands('commands', ['general', 'moderation']);
   } catch (err) {
     console.error(`Unable to load groups. Error: ${err}`);
   }
@@ -68,13 +66,15 @@ client.on('message', async message => {
   }
 
   const commandArgs = message.content.slice(prefix.length).split(/ +/);
-  const commandName = commandArgs.shift() || "";
+  const commandName = commandArgs.shift() || '';
 
   // Try to get command by primary name, otherwise check aliases
   const command =
     commands.get(commandName) ||
     commands.find(
-      command => command.hasOwnProperty("aliases") && command.aliases!.includes(commandName),
+      command =>
+        command.hasOwnProperty('aliases') &&
+        command.aliases!.includes(commandName),
     );
 
   // If command/aliases not found, return
@@ -92,7 +92,7 @@ client.on('message', async message => {
   if (
     command.requiredPermissions &&
     !message.member.hasPermission(
-        command.requiredPermissions as Discord.PermissionResolvable
+      command.requiredPermissions as Discord.PermissionResolvable,
     )
   ) {
     await message.channel.send(
