@@ -1,11 +1,12 @@
 import Discord from 'discord.js';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 import fs from 'fs';
 import { promisify } from 'util';
 const readdir = promisify(fs.readdir);
 
-interface Command {
+interface ICommand {
   name: string;
   description: string;
   usage?: string;
@@ -17,7 +18,7 @@ interface Command {
 }
 
 async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
-  let result = new Discord.Collection<string, Command>();
+  const result = new Discord.Collection<string, ICommand>();
 
   // For all directories in `commandGroups` (with `commandsDir` as root),
   // store all commands in `result`.
@@ -28,7 +29,7 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
       )).filter(file => file.endsWith('.js'));
 
       for (const file of commandFiles) {
-        const command: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
+        const command: ICommand = require(`${__dirname}/${commandsDir}/${group}/${file}`);
         result.set(command.name, command);
       }
     } catch (err) {
@@ -40,7 +41,7 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
 }
 
 const client = new Discord.Client();
-let commands: Discord.Collection<string, Command>;
+let commands: Discord.Collection<string, ICommand>;
 const prefix = '>>';
 
 client.once('ready', async () => {
@@ -72,9 +73,8 @@ client.on('message', async message => {
   const command =
     commands.get(commandName) ||
     commands.find(
-      command =>
-        command.hasOwnProperty('aliases') &&
-        command.aliases!.includes(commandName),
+      cmd =>
+        cmd.hasOwnProperty('aliases') && cmd.aliases!.includes(commandName),
     );
 
   // If command/aliases not found, return

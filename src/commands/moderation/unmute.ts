@@ -12,14 +12,14 @@ export async function execute(
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to unmute!');
   } else {
-    let memberToUnmute = message.mentions.members.first() || commandArgs[0];
+    const memberToUnmute = message.mentions.members.first() || commandArgs[0];
     if (!memberToUnmute) {
       await message.channel.send(
         "Error! You didn't specify anybody to unmute!",
       );
       return;
     }
-    let mutedRole = message.guild.roles.find(role => role.name === 'Muted');
+    const mutedRole = message.guild.roles.find(role => role.name === 'Muted');
     if (!mutedRole) {
       await message.channel.send(
         "Error! A 'Muted' role doesn't exist in this server",

@@ -12,7 +12,7 @@ export async function execute(
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
-    let memberToMute = message.mentions.members.first() || commandArgs[0];
+    const memberToMute = message.mentions.members.first() || commandArgs[0];
     if (!memberToMute) {
       await message.channel.send("Error! You didn't specify anybody to mute!");
       return;
@@ -26,15 +26,15 @@ export async function execute(
     if (!mutedRole) {
       try {
         mutedRole = await message.guild.createRole({
+          color: '#808080',
           name: 'Muted',
           permissions: [],
-          color: '#808080',
         });
         // eslint-disable-next-line no-unused-vars
         for (const [, channel] of message.guild.channels) {
           await channel.overwritePermissions(mutedRole, {
-            SEND_MESSAGES: false,
             ADD_REACTIONS: false,
+            SEND_MESSAGES: false,
           });
         }
       } catch (err) {
