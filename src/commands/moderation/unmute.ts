@@ -12,6 +12,7 @@ export async function execute(
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to unmute!');
   } else {
+    // Verify at least one user is passed
     const memberToUnmute = message.mentions.members.first() || commandArgs[0];
     if (!memberToUnmute) {
       await message.channel.send(
@@ -19,6 +20,7 @@ export async function execute(
       );
       return;
     }
+
     const mutedRole = message.guild.roles.find(role => role.name === 'Muted');
     if (!mutedRole) {
       await message.channel.send(
@@ -26,10 +28,13 @@ export async function execute(
       );
       return;
     }
+
     if (!memberToUnmute.roles.has(mutedRole.id)) {
       await message.channel.send(`Error! ${memberToUnmute} is not muted!`);
       return;
     }
+
+    // Unmute user and respond on Discord
     await memberToUnmute.removeRole(mutedRole);
     await message.channel.send(`${memberToUnmute} was unmuted!`);
   }

@@ -12,16 +12,21 @@ export async function execute(
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
+    // Verify at least one user is passed
     const memberToMute = message.mentions.members.first() || commandArgs[0];
     if (!memberToMute) {
       await message.channel.send("Error! You didn't specify anybody to mute!");
       return;
     }
+
+    // Make sure the person being muted CAN be muted
     if (memberToMute.hasPermission('MANAGE_MESSAGES')) {
       await message.channel.send(`${memberToMute} cannot be muted!`);
       return;
     }
+
     let mutedRole = message.guild.roles.find(role => role.name === 'Muted');
+
     // Create muted role if it doesn't exist already
     if (!mutedRole) {
       try {
@@ -30,7 +35,7 @@ export async function execute(
           name: 'Muted',
           permissions: [],
         });
-        // eslint-disable-next-line no-unused-vars
+
         for (const [, channel] of message.guild.channels) {
           await channel.overwritePermissions(mutedRole, {
             ADD_REACTIONS: false,
@@ -42,6 +47,8 @@ export async function execute(
         return;
       }
     }
+
+    // Mute user and respond on Discord
     await memberToMute.addRole(mutedRole);
     await message.channel.send(`${memberToMute} was muted!`);
   }
