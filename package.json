@@ -6,11 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "devstart": "nodemon src/index.js",
-<<<<<<< HEAD
-    "lint": "eslint 'src/**/*.js'"
-=======
     "lint": "eslint 'src/*.js' --format codeframe"
->>>>>>> 46520dbffd688ada6f764c75b4be64283eccf238
   },
   "repository": {
     "type": "git",
