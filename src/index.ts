@@ -1,38 +1,24 @@
-const Discord = require('discord.js');
+import Discord from "discord.js";
 require('dotenv').config();
 
-const fs = require('fs');
-const { promisify } = require('util');
+import fs from 'fs';
+import { promisify } from 'util';
 const readdir = promisify(fs.readdir);
 
-/**
- * @callback executeCallback
- * @param {Discord.Message} responseCode
- * @param {Array<string>} responseMessage
- */
+interface Command {
+    name: string;
+    description: string;
+    usage?: string;
+    group: string;
+    requiredPermissions?: string[];
+    guildOnly: boolean;
+    aliases?: string[];
+    execute(message: Discord.Message, commandArgs: string[]): void;
+}
 
-/**
- * Object representing a Discord command
- * @typedef {Object} Command
- * @property {string} name Name of the command
- * @property {string} description Description of the command
- * @property {string} [usage] Usage string of the command
- * @property {string} group Command category to group this command with
- * @property {Array<string>} [requiredPermissions] Permissions this command requires to execute
- * @property {boolean} [guildOnly] Whether this command can be executed outside of guilds
- * @property {Array<string>} [aliases] Any aliases this command has
- * @property {executeCallback} execute The callback to execute the command
- */
 
-/**
- * @param {string} commandsDir
- * @param {Array<string>} commandGroups
- */
-async function loadAllCommands(commandsDir, commandGroups) {
-  /**
-   * @type {Discord.Collection<string, Command>}
-   */
-  let result = new Discord.Collection();
+async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
+  let result = new Discord.Collection<string, Command>();
 
   // For all directories in `commandGroups` (with `commandsDir` as root),
   // store all commands in `result`.
@@ -41,8 +27,7 @@ async function loadAllCommands(commandsDir, commandGroups) {
       const commandFiles = await readdir(`${__dirname}/${commandsDir}/${group}`);
 
       for (const file of commandFiles) {
-        /** @type {Command} */
-        const command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
+        const command: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
         result.set(command.name, command);
       }
     } catch (err) {
@@ -54,8 +39,7 @@ async function loadAllCommands(commandsDir, commandGroups) {
 }
 
 const client = new Discord.Client();
-/** @type {Discord.Collection<string, Command>} */
-let commands;
+let commands: Discord.Collection<string, Command>;
 const prefix = '>>';
 
 client.once('ready', async () => {
@@ -87,11 +71,10 @@ client.on('message', async message => {
   const commandName = commandArgs.shift() || "";
 
   // Try to get command by primary name, otherwise check aliases
-  /** @type {Command} */
   const command =
     commands.get(commandName) ||
     commands.find(
-      command => command.aliases && command.aliases.includes(commandName),
+      command => command.hasOwnProperty("aliases") && command.aliases!.includes(commandName),
     );
 
   // If command/aliases not found, return
@@ -108,7 +91,9 @@ client.on('message', async message => {
   // Check if user has required permissions to run the command
   if (
     command.requiredPermissions &&
-    !message.member.hasPermission(command.requiredPermissions)
+    !message.member.hasPermission(
+        command.requiredPermissions as Discord.PermissionResolvable
+    )
   ) {
     await message.channel.send(
       "Error! You don't have permissions to run this command!",

@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7,14 +6,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.name = 'mute';
-exports.description = 'Mute one or more users';
-exports.usage = '<user>';
-exports.group = 'Moderation';
-exports.requiredPermissions = ['MANAGE_ROLES'];
-exports.guildOnly = true;
-function execute(message, commandArgs) {
+export const name = 'mute';
+export const description = 'Mute one or more users';
+export const usage = '<user>';
+export const group = 'Moderation';
+export const requiredPermissions = ['MANAGE_ROLES'];
+export const guildOnly = true;
+/**
+ * @param {import("discord.js").Message} message
+ * @param {Array<string>} commandArgs
+ */
+export function execute(message, commandArgs) {
     return __awaiter(this, void 0, void 0, function* () {
         if (commandArgs.length === 0) {
             yield message.channel.send('Nobody was specified to mute!');
@@ -56,5 +58,4 @@ function execute(message, commandArgs) {
         }
     });
 }
-exports.execute = execute;
 //# sourceMappingURL=mute.js.map

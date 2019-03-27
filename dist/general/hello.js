@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7,12 +6,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.name = 'hello';
-exports.description = 'Say hello to someone!';
-exports.group = 'General';
-exports.usage = '[arg...]';
-function execute(message, commandArgs) {
+export const name = 'hello';
+export const description = 'Say hello to someone!';
+export const group = 'General';
+export const usage = '[arg...]';
+/**
+ * @param {import("discord.js").Message} message
+ * @param {Array<string>} commandArgs
+ */
+export function execute(message, commandArgs) {
     return __awaiter(this, void 0, void 0, function* () {
         if (commandArgs.length === 0) {
             yield message.channel.send(`Hello, ${message.author.username}!`);
@@ -22,5 +24,4 @@ function execute(message, commandArgs) {
         }
     });
 }
-exports.execute = execute;
 //# sourceMappingURL=hello.js.map
