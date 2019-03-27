@@ -31,11 +31,11 @@ async function loadAllCommands(commandsDir, commandGroups) {
   // store all commands in `result`.
   for (const group of commandGroups) {
     try {
-      const commandFiles = await readdir(`./${commandsDir}/${group}`);
+      const commandFiles = await readdir(`${__dirname}/${commandsDir}/${group}`);
 
       for (const file of commandFiles) {
         /** @type {Command} */
-        const command = require(`./${commandsDir}/${group}/${file}`);
+        const command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
         result.set(command.name, command);
       }
     } catch (err) {
