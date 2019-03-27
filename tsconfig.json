@@ -21,7 +21,5 @@
     "moduleResolution": "node",
     "esModuleInterop": true
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["./src/**/*"]
 }
