@@ -4,9 +4,9 @@
   "description": "A general purpose Discord bot",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "devstart": "nodemon index.js",
-    "lint": "eslint '**/*.js' --format codeframe"
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "lint": "tslint 'src/**/*.ts' --format codeFrame"
   },
   "repository": {
     "type": "git",
@@ -19,14 +19,16 @@
   "homepage": "https://github.com/arnavb/potr-bot#readme",
   "license": "UNLICENSED",
   "dependencies": {
+    "@types/dotenv": "^6.1.0",
+    "@types/node": "^11.12.0",
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0"
   },
   "devDependencies": {
-    "eslint": "^5.15.3",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "nodemon": "^1.18.10",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "tslint": "^5.14.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.3.4000"
   }
 }
