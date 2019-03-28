@@ -30,7 +30,6 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
 
       for (const file of commandFiles) {
         const commandObject: ICommand = require(`${__dirname}/${commandsDir}/${group}/${file}`);
-        console.log(commandObject);
         result.set(commandObject.name, commandObject);
       }
     } catch (err) {
