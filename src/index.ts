@@ -24,9 +24,9 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
   // store all commands in `result`.
   for (const group of commandGroups) {
     try {
-      const commandFiles = (await readdir(
-        `${__dirname}/${commandsDir}/${group}`,
-      )).filter(file => file.endsWith('.js'));
+      const commandFiles = (await readdir(`${__dirname}/${commandsDir}/${group}`)).filter(file =>
+        file.endsWith('.js'),
+      );
 
       for (const file of commandFiles) {
         const command: ICommand = require(`${__dirname}/${commandsDir}/${group}/${file}`);
@@ -45,9 +45,7 @@ let commands: Discord.Collection<string, ICommand>;
 const prefix = '>>';
 
 client.once('ready', async () => {
-  console.log(
-    `Logging in with ${client.user.username}#${client.user.discriminator}`,
-  );
+  console.log(`Logging in with ${client.user.username}#${client.user.discriminator}`);
 
   try {
     commands = await loadAllCommands('commands', ['general', 'moderation']);
@@ -72,10 +70,7 @@ client.on('message', async message => {
   // Try to get command by primary name, otherwise check aliases
   const command =
     commands.get(commandName) ||
-    commands.find(
-      cmd =>
-        cmd.hasOwnProperty('aliases') && cmd.aliases!.includes(commandName),
-    );
+    commands.find(cmd => cmd.hasOwnProperty('aliases') && cmd.aliases!.includes(commandName));
 
   // If command/aliases not found, return
   if (!command) {
@@ -91,13 +86,9 @@ client.on('message', async message => {
   // Check if user has required permissions to run the command
   if (
     command.requiredPermissions &&
-    !message.member.hasPermission(
-      command.requiredPermissions as Discord.PermissionResolvable,
-    )
+    !message.member.hasPermission(command.requiredPermissions as Discord.PermissionResolvable)
   ) {
-    await message.channel.send(
-      "Error! You don't have permissions to run this command!",
-    );
+    await message.channel.send("Error! You don't have permissions to run this command!");
   }
 
   try {

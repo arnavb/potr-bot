@@ -5,10 +5,7 @@ export const group = 'Moderation';
 export const requiredPermissions = ['MANAGE_ROLES'];
 export const guildOnly = true;
 
-export async function execute(
-  message: import('discord.js').Message,
-  commandArgs: string[],
-) {
+export async function execute(message: import('discord.js').Message, commandArgs: string[]) {
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
