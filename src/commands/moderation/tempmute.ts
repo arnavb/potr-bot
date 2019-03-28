@@ -5,7 +5,7 @@ export const description = 'Mute a user for a specified amount of time';
 export const usage = '<user> <time>';
 export const group = 'Moderation';
 export const requiredPermissions = ['MANAGE_ROLES'];
-export const aliases = ["tm"];
+export const aliases = ['tm'];
 export const guildOnly = true;
 
 export async function execute(message: import('discord.js').Message, commandArgs: string[]) {
@@ -22,8 +22,8 @@ export async function execute(message: import('discord.js').Message, commandArgs
     const timeToMute = commandArgs[1];
 
     if (!timeToMute) {
-        await message.channel.send("You didn't specify a time period!");
-        return;
+      await message.channel.send("You didn't specify a time period!");
+      return;
     }
 
     // Make sure the person being muted CAN be muted
@@ -57,11 +57,15 @@ export async function execute(message: import('discord.js').Message, commandArgs
 
     // Mute user and respond on Discord
     await memberToMute.addRole(mutedRole);
-    await message.channel.send(`${memberToMute} was muted for ${ms(ms(timeToMute))}!`);
+    await message.channel.send(
+      `${memberToMute} was muted for ${ms(ms(timeToMute), { long: true })}!`,
+    );
 
     setTimeout(async () => {
-        await memberToMute.removeRole(mutedRole);
-        await message.channel.send(`${memberToMute} was unmuted after ${ms(ms(timeToMute))}!`);
-    }, ms(timeToMute))
+      await memberToMute.removeRole(mutedRole);
+      await message.channel.send(
+        `${memberToMute} was unmuted after ${ms(ms(timeToMute), { long: true })}!`,
+      );
+    }, ms(timeToMute));
   }
 }
