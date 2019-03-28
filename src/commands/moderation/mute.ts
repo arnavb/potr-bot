@@ -1,7 +1,7 @@
 import ms = require('ms');
 
 export const name = 'mute';
-export const description = 'Mute one or more users';
+export const description = 'Mute a user for an optional period of time';
 export const usage = '<user> [time]';
 export const group = 'Moderation';
 export const requiredPermissions = ['MANAGE_ROLES'];

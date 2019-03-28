@@ -2,9 +2,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es2016"],
+    "rootDir": "src",
+    "outDir": "dist",
     "sourceMap": true,
-    "outDir": "./dist",
+    "lib": ["es2016"],
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -21,6 +22,5 @@
     "forceConsistentCasingInFileNames": true,
     "newLine": "LF",
     "noEmitOnError": true
-  },
-  "include": ["./src/**/*"]
+  }
 }

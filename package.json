@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
+    "watch": "npm run build && tsc -w",
     "lint": "tslint 'src/**/*.ts' --format codeFrame"
   },
   "repository": {
