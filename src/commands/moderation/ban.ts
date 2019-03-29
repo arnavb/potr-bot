@@ -9,7 +9,7 @@ export async function execute(message: import('discord.js').Message, commandArgs
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
-    const userToBan = message.mentions.members.first() || commandArgs[0];
+    const userToBan = message.mentions.members.first() || message.guild.member(commandArgs[0]);
 
     if (!userToBan) {
       await message.channel.send("You didn't specify anybody to ban!");

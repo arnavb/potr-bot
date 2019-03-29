@@ -12,7 +12,7 @@ export async function execute(message: import('discord.js').Message, commandArgs
     await message.channel.send('Nobody was specified to mute!');
   } else {
     // Verify at least one user is passed
-    const memberToMute = message.mentions.members.first() || commandArgs[0];
+    const memberToMute = message.mentions.members.first() || message.guild.member(commandArgs[0]);
     if (!memberToMute) {
       await message.channel.send("Error! You didn't specify anybody to mute!");
       return;
