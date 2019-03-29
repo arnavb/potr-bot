@@ -1,4 +1,7 @@
+import { getFirstUser } from '../../utils';
+
 export const name = 'unmute';
+
 export const description = 'Unmute one or more users';
 export const usage = '<user>';
 export const group = 'Moderation';
@@ -10,7 +13,8 @@ export async function execute(message: import('discord.js').Message, commandArgs
     await message.channel.send('Nobody was specified to unmute!');
   } else {
     // Verify at least one user is passed
-    const memberToUnmute = message.mentions.members.first() || message.guild.member(commandArgs[0]);
+    const memberToUnmute = getFirstUser(message, commandArgs);
+
     if (!memberToUnmute) {
       await message.channel.send("Error! You didn't specify anybody to unmute!");
       return;

@@ -1,3 +1,5 @@
+import { getFirstUser } from '../../utils';
+
 export const name = 'ban';
 export const description = 'Ban a user';
 export const usage = '<user> [reason]';
@@ -9,7 +11,7 @@ export async function execute(message: import('discord.js').Message, commandArgs
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
-    const userToBan = message.mentions.members.first() || message.guild.member(commandArgs[0]);
+    const userToBan = getFirstUser(message, commandArgs);
 
     if (!userToBan) {
       await message.channel.send("You didn't specify anybody to ban!");
