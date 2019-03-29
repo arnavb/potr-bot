@@ -95,7 +95,7 @@ client.on('message', async message => {
     await command.execute(message, commandArgs);
   } catch (err) {
     // TODO: Better error handling
-    await message.channel.send("An error occurred while running this command!");
+    await message.channel.send('An error occurred while running this command!');
     console.error(`An error occurred! ${err}`);
   }
 });
