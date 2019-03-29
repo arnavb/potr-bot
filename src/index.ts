@@ -79,7 +79,7 @@ client.on('message', async message => {
 
   // Filter guild-only commands
   if (command.guildOnly && message.channel.type !== 'text') {
-    await message.channel.send(`Error! I can't use that command in DMs!`);
+    await message.channel.send("I can't use that command in DMs!");
     return;
   }
 
@@ -88,13 +88,14 @@ client.on('message', async message => {
     command.requiredPermissions &&
     !message.member.hasPermission(command.requiredPermissions as Discord.PermissionResolvable)
   ) {
-    await message.channel.send("Error! You don't have permissions to run this command!");
+    await message.channel.send("You don't have permissions to run this command!");
   }
 
   try {
     await command.execute(message, commandArgs);
   } catch (err) {
     // TODO: Better error handling
+    await message.channel.send("An error occurred while running this command!");
     console.error(`An error occurred! ${err}`);
   }
 });

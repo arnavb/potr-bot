@@ -23,14 +23,14 @@ export async function execute(message: import('discord.js').Message, commandArgs
       return;
     }
 
-    let reason = 'for no reason';
+    let reason = 'no reason';
 
     if (commandArgs.length > 1) {
       reason = commandArgs.slice(1).join(' ');
     }
 
     try {
-      await memberToBan.ban({ reason });
+      await memberToBan.ban(reason);
     } catch (err) {
       await message.channel.send(`Unable to ban user ${memberToBan}`);
       return;
