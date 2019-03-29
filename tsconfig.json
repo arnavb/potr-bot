@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "src",
     "outDir": "dist",
     "sourceMap": true,
     "lib": ["es2016"],
@@ -15,5 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "newLine": "LF",
     "noEmitOnError": true
-  }
+  },
+  "include": ["src/**/*.ts"]
 }
