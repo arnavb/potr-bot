@@ -5,6 +5,7 @@ node_js:
 script:
   - npm run build -s
   - npm run lint -s
+  - npm test
 
 branches:
   only:

@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
+    "test": "jest",
+    "coverage": "jest --collect-coverage",
     "watch": "npm run build && tsc -w",
     "lint": "tslint 'src/**/*.ts' --format codeFrame",
     "lint:fix": "npm run lint -- --fix"
