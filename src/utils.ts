@@ -4,13 +4,13 @@
  * @param mention The mention to extract the ID from
  */
 export function extractIDFromMention(mention: string) {
-    const mentionRegex = /^<@!?(\d+)>$/;
+  const mentionRegex = /^<@!?(\d+)>$/;
 
-    const match = mention.match(mentionRegex);
+  const match = mention.match(mentionRegex);
 
-    if (match) {
-        return match[1];
-    }
+  if (match) {
+    return match[1];
+  }
 
-    return undefined;
+  return undefined;
 }

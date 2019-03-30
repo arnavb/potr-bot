@@ -11,13 +11,12 @@ export async function execute(message: import('discord.js').Message, commandArgs
   if (commandArgs.length === 0) {
     await message.channel.send('Nobody was specified to mute!');
   } else {
-    const memberString =  extractIDFromMention(commandArgs[0]);
+    const memberString = extractIDFromMention(commandArgs[0]);
 
     if (!memberString) {
       await message.channel.send("You didn't specify anybody to ban!");
       return;
     }
-
 
     const memberToBan = message.guild.member(memberString!);
 
