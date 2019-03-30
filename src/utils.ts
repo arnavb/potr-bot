@@ -1,8 +1,16 @@
 /**
- * Get first user mentioned in a message (usually as a command parameter)
- * @param message The original Discord message
- * @param commandArgs The arguments of the command
+ * Extract the #'s from a mention of the form <@[!]##################> (!
+ * is optional)
+ * @param mention The mention
  */
-export function getFirstUser(message: import('discord.js').Message, commandArgs: string[]) {
-  return message.mentions.members.first() || message.guild.member(commandArgs[0]);
+export function extractIDFromMention(mention: string) {
+    const mentionRegex = /^<@!?(\d+)>$/;
+
+    const match = mention.match(mentionRegex);
+
+    if (match) {
+        return match[1];
+    }
+
+    return undefined;
 }

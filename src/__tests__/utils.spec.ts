@@ -1,7 +1,11 @@
-// import { getFirstUser } from '../src/utils';
+// import { extractIDFromMention } from '../utils';
 
-describe('Example test', () => {
-  test('Example inner test', () => {
-    expect(2 + 2).toEqual(4);
+
+
+describe('getFirstUser', () => {
+  describe('when one user is passed', () => {
+    it('returns the first user mentioned', () => {
+
+    });
   });
 });
