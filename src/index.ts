@@ -77,6 +77,20 @@ client.on('message', async message => {
     return;
   }
 
+  // Filter commands with wrong number of arguments
+  if (command.usage) {
+    const numberOfArgs = command.usage
+      .split(' ')
+      .filter(arg => arg.startsWith('<') && arg.endsWith('>'));
+    if (commandArgs.length < numberOfArgs.length) {
+      await message.channel.send(
+        `The command \`${commandName}\` expects ${numberOfArgs.length -
+          commandArgs.length} more argument(s)!`,
+      );
+      return;
+    }
+  }
+
   // Filter guild-only commands
   if (command.guildOnly && message.channel.type !== 'text') {
     await message.channel.send("I can't use that command in DMs!");
@@ -88,7 +102,8 @@ client.on('message', async message => {
     command.requiredPermissions &&
     !message.member.hasPermission(command.requiredPermissions as Discord.PermissionResolvable)
   ) {
-    await message.channel.send("You don't have permissions to run this command!");
+    await message.channel.send("You don't have the required permissions to run this command!");
+    return;
   }
 
   try {
