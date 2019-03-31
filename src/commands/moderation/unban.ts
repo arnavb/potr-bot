@@ -1,8 +1,8 @@
 import { extractIDFromMention } from '../../utils';
 
-export const name = 'ban';
-export const description = 'Ban a user';
-export const usage = '<user> [reason]';
+export const name = 'unban';
+export const description = 'Unban a user';
+export const usage = '<user>';
 export const group = 'Moderation';
 export const requiredPermissions = ['BAN_MEMBERS'];
 export const guildOnly = true;
@@ -12,23 +12,17 @@ export async function execute(message: import('discord.js').Message, commandArgs
   const memberString = extractIDFromMention(commandArgs[0]);
 
   if (!memberString) {
-    await message.channel.send("You didn't specify anybody to ban!");
+    await message.channel.send("You didn't specify anybody to unban!");
     return;
   }
 
-  const memberToBan = message.guild.member(memberString!);
+  const memberToUnban = message.guild.member(memberString!);
 
-  if (!memberToBan) {
+  if (!memberToUnban) {
     await message.channel.send("That user isn't in this server or does not exist!");
     return;
   }
 
-  let reason = 'no reason';
-
-  if (commandArgs.length > 1) {
-    reason = commandArgs.slice(1).join(' ');
-  }
-
-  await memberToBan.ban(reason);
-  await message.channel.send(`Successfully banned ${memberToBan} for ${reason}`);
+  await message.guild.unban(memberString);
+  await message.channel.send(`Successfully unbanned ${memberToUnban}!`);
 }
