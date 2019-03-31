@@ -84,8 +84,9 @@ client.on('message', async message => {
       .filter(arg => arg.startsWith('<') && arg.endsWith('>'));
     if (commandArgs.length < numberOfArgs.length) {
       await message.channel.send(
-        `The command \`${commandName}\` expects ${numberOfArgs.length -
-          commandArgs.length} more argument(s)!`,
+        `The command \`${commandName}\` expects ${numberOfArgs.length - commandArgs.length}` +
+          `more argument(s)!\n` +
+          `The correct usage would be \`${prefix}${commandName} ${command.usage}\``,
       );
       return;
     }
