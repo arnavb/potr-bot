@@ -8,9 +8,5 @@ export function extractIDFromMention(mention: string) {
 
   const match = mention.match(mentionRegex);
 
-  if (match) {
-    return match[1];
-  }
-
-  return undefined;
+  return match ? match[1] : undefined;
 }
