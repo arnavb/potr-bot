@@ -2,10 +2,20 @@ language: node_js
 node_js:
   - 'lts/*'
 
-script:
-  - npm run build -s
-  - npm run lint -s
-  - npm test
+matrix:
+  include:
+    - name: 'Build and Test'
+      script:
+        - npm run build -s
+        - npm test
+
+    - name: 'Coverage'
+      script:
+        - jest --coverage --coverageReporters=text-lcov | coveralls
+
+    - name: 'Lint'
+      script:
+        - npm run lint -s
 
 branches:
   only:
