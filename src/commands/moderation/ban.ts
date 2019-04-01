@@ -16,7 +16,7 @@ export async function execute(message: import('discord.js').Message, commandArgs
     return;
   }
 
-  const memberToBan = message.guild.member(memberString!);
+  const memberToBan = message.guild.member(memberString);
 
   if (!memberToBan) {
     await message.channel.send("That user isn't in this server or does not exist!");
