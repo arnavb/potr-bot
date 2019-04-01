@@ -16,13 +16,6 @@ export async function execute(message: import('discord.js').Message, commandArgs
     return;
   }
 
-  const memberToUnban = message.guild.member(memberString!);
-
-  if (!memberToUnban) {
-    await message.channel.send("That user isn't in this server or does not exist!");
-    return;
-  }
-
   await message.guild.unban(memberString);
-  await message.channel.send(`Successfully unbanned ${memberToUnban}!`);
+  await message.channel.send(`Successfully unbanned!`);
 }
