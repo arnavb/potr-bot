@@ -17,7 +17,7 @@ export async function execute(message: import('discord.js').Message, commandArgs
     return;
   }
 
-  const memberToMute = message.guild.member(memberString!);
+  const memberToMute = message.guild.member(memberString);
 
   if (!memberToMute) {
     await message.channel.send("That user isn't in this server or does not exist!");
