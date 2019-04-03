@@ -21,9 +21,11 @@
   "homepage": "https://github.com/arnavb/potr-bot#readme",
   "license": "UNLICENSED",
   "dependencies": {
+    "@types/better-sqlite3": "^5.2.3",
     "@types/dotenv": "^6.1.0",
     "@types/ms": "^0.7.30",
     "@types/node": "^11.12.0",
+    "better-sqlite3": "^5.4.0",
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
     "ms": "^2.1.1"
