@@ -1,5 +1,5 @@
 import ms from 'ms';
-import { extractIDFromMention } from '../../utils';
+import { extractUserFrom } from '../../utils';
 
 export const name = 'mute';
 export const description = 'Mute a user for an optional period of time';
@@ -10,7 +10,7 @@ export const guildOnly = true;
 
 export async function execute(message: import('discord.js').Message, commandArgs: string[]) {
   // Verify at least one user is passed
-  const memberString = extractIDFromMention(commandArgs[0]);
+  const memberString = extractUserFrom(commandArgs[0]);
 
   if (!memberString) {
     await message.channel.send("You didn't specify anybody to mute!");

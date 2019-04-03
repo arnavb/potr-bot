@@ -1,4 +1,4 @@
-import { extractIDFromMention } from '../../utils';
+import { extractUserFrom } from '../../utils';
 
 export const name = 'unban';
 export const description = 'Unban a user';
@@ -9,7 +9,7 @@ export const guildOnly = true;
 
 export async function execute(message: import('discord.js').Message, commandArgs: string[]) {
   // Verify a valid member is passed
-  const memberString = extractIDFromMention(commandArgs[0]);
+  const memberString = extractUserFrom(commandArgs[0]);
 
   if (!memberString) {
     await message.channel.send("You didn't specify anybody to unban!");

@@ -1,13 +1,22 @@
 /**
- * Extract the #'s from a mention of the form <@[!]##################> (!
- * is optional)
- * @param mention The mention to extract the ID from
+ * Extract the ID from a mention of the form <@[!]##################> (!
+ * is optional) or from an ID of the form ##################
+ * @param original The mention or ID to extract the ID from
  * @returns the extracted ID if found else undefined
  */
-export function extractIDFromMention(mention: string) {
+export function extractUserFrom(original: string) {
+  const simpleIDRegex = /^(\d+)$/;
   const mentionRegex = /^<@!?(\d+)>$/;
 
-  const match = mention.match(mentionRegex);
+  const idMatch = original.match(simpleIDRegex);
+  if (idMatch) {
+    return idMatch[1];
+  }
 
-  return match ? match[1] : undefined;
+  const mentionMatch = original.match(mentionRegex);
+  if (mentionMatch) {
+    return mentionMatch[1];
+  }
+
+  return undefined;
 }
