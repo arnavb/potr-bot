@@ -99,7 +99,9 @@ VALUES (@Id, @GuildId, @UserId, @Experience, @Level);`);
 
     if (userScore.Experience > 100 * userScore.Level) {
       ++userScore.Level;
-      await message.channel.send(`Congratulations ${message.member}! You've leveled up to ${userScore.Level}!`);
+      await message.channel.send(
+        `Congratulations ${message.member}! You've leveled up to ${userScore.Level}!`,
+      );
     }
 
     console.log(`${message.author.username} just sent a message: ${message.content}`);
