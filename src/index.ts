@@ -1,4 +1,3 @@
-import Database from 'better-sqlite3';
 import Discord from 'discord.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -42,28 +41,11 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
 }
 
 const client = new Discord.Client();
-const db = new Database('./db/UserPoints.db');
 let commands: Discord.Collection<string, ICommand>;
 const prefix = '>>';
 
 client.once('ready', async () => {
   console.log(`Logging in with ${client.user.username}#${client.user.discriminator}`);
-
-  // Create the database to store users
-  db.prepare(
-    `
-   CREATE TABLE IF NOT EXISTS UserPoints (
-      Id TEXT PRIMARY KEY,
-      GuildId TEXT NOT NULL,
-      UserId TEXT NOT NULL,
-      Experience INTEGER,
-      Level INTEGER
-);
-  `,
-  ).run();
-
-  db.pragma('synchronous = normal');
-  db.pragma('journal_mode = wal');
 
   try {
     commands = await loadAllCommands('commands', ['general', 'moderation']);
@@ -73,42 +55,9 @@ client.once('ready', async () => {
 });
 
 client.on('message', async message => {
-  const getUser = db.prepare('SELECT * FROM UserPoints WHERE GuildId = ? AND UserId = ?;');
-  const setUser = db.prepare(`INSERT OR REPLACE INTO UserPoints (Id, GuildId, UserId, Experience, Level)
-VALUES (@Id, @GuildId, @UserId, @Experience, @Level);`);
-
   // If command is not of valid format or is written by a bot, return
   if (message.author.bot) {
     return;
-  }
-
-  if (message.guild) {
-    let userScore = getUser.get(message.guild.id, message.author.id);
-
-    if (!userScore) {
-      userScore = {
-        Id: `${message.guild.id}-${message.author.id}`,
-        GuildId: message.guild.id,
-        UserId: message.author.id,
-        Experience: 0,
-        Level: 1,
-      };
-    }
-
-    userScore.Experience += Math.random() * 10 + 20;
-
-    if (userScore.Experience > 100 * userScore.Level) {
-      ++userScore.Level;
-      await message.channel.send(
-        `Congratulations ${message.member}! You've leveled up to ${userScore.Level}!`,
-      );
-    }
-
-    console.log(`${message.author.username} just sent a message: ${message.content}`);
-    console.log(`Exp details:`);
-    console.log(userScore);
-
-    setUser.run(userScore);
   }
 
   if (!message.content.startsWith(prefix) || message.content.trim().length === prefix.length) {
