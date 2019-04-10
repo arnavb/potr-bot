@@ -5,7 +5,8 @@
   "rules": {
     "prettier": true,
     "no-console": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-default-export": true
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

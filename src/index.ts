@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import dotenv from 'dotenv';
+import { UsersDb } from './users-db';
 dotenv.config();
 
 import fs from 'fs';
@@ -42,10 +43,14 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
 
 const client = new Discord.Client();
 let commands: Discord.Collection<string, ICommand>;
+const usersDb: UsersDb = new UsersDb(process.env.POSTGRES_DB_URI!, console.error);
 const prefix = '>>';
 
 client.once('ready', async () => {
   console.log(`Logging in with ${client.user.username}#${client.user.discriminator}`);
+
+  // Setup database
+  await usersDb.initialize();
 
   try {
     commands = await loadAllCommands('commands', ['general', 'moderation']);
