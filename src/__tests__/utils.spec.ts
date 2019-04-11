@@ -1,4 +1,4 @@
-import { randInt, extractUserFrom } from '../utils';
+import { extractUserFrom, randInt } from '../utils';
 
 describe('extractIDFromMention', () => {
   describe('when an empty string is passed', () => {
@@ -32,8 +32,8 @@ describe('extractIDFromMention', () => {
   });
 });
 
-describe("randInt", () => {
-  it("returns a random integer between min and max", () => {
+describe('randInt', () => {
+  it('returns a random integer between min and max', () => {
     const result = randInt(0, 4);
     expect(result).toBeGreaterThanOrEqual(0);
     expect(result).toBeLessThan(4);

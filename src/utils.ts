@@ -28,5 +28,5 @@ export function extractUserFrom(original: string) {
  * @returns a random integer in [min, max)
  */
 export function randInt(min: number, max: number) {
-  return Math.random() * (max - min) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
