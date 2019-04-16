@@ -4,7 +4,9 @@
   "jsRules": {},
   "rules": {
     "prettier": true,
-    "no-console": false
+    "no-console": false,
+    "object-literal-sort-keys": false,
+    "no-default-export": true
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

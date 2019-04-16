@@ -20,3 +20,13 @@ export function extractUserFrom(original: string) {
 
   return undefined;
 }
+
+/**
+ * Generate a random integer within a range
+ * @param min the inclusive minimum number
+ * @param max the exclusive maximum number
+ * @returns a random integer in [min, max)
+ */
+export function randInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}

@@ -1,5 +1,7 @@
 import Discord from 'discord.js';
 import dotenv from 'dotenv';
+import { UsersDb } from './users-db';
+import { randInt } from './utils';
 dotenv.config();
 
 import fs from 'fs';
@@ -42,10 +44,14 @@ async function loadAllCommands(commandsDir: string, commandGroups: string[]) {
 
 const client = new Discord.Client();
 let commands: Discord.Collection<string, ICommand>;
+const usersDb: UsersDb = new UsersDb(process.env.POSTGRES_DB_URI!, console.error);
 const prefix = '>>';
 
 client.once('ready', async () => {
   console.log(`Logging in with ${client.user.username}#${client.user.discriminator}`);
+
+  // Setup database
+  await usersDb.initialize();
 
   try {
     commands = await loadAllCommands('commands', ['general', 'moderation']);
@@ -56,11 +62,33 @@ client.once('ready', async () => {
 
 client.on('message', async message => {
   // If command is not of valid format or is written by a bot, return
-  if (
-    !message.content.startsWith(prefix) ||
-    message.author.bot ||
-    message.content.trim().length === prefix.length
-  ) {
+  if (message.author.bot) {
+    return;
+  }
+
+  if (message.channel.type === 'text') {
+    const randomExpAmount = randInt(20, 30);
+    if (await usersDb.userExists(message.guild.id, message.author.id)) {
+      await usersDb.increaseUserExp(randomExpAmount, message.guild.id, message.author.id);
+    } else {
+      await usersDb.createUser(message.guild.id, message.author.id, randomExpAmount);
+    }
+
+    const { exp, level } = (await usersDb.getUserRows(message.guild.id, message.author.id))
+      .rows[0] as any;
+
+    // 100 exp required for each level. Will be changed later
+    if (exp > level * 100) {
+      await Promise.all([
+        usersDb.increaseUserLevel(message.guild.id, message.author.id),
+        message.channel.send(
+          `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
+        ),
+      ]);
+    }
+  }
+
+  if (!message.content.startsWith(prefix) || message.content.trim().length === prefix.length) {
     return;
   }
 
