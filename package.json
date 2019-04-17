@@ -2,13 +2,14 @@
   "name": "potr-bot",
   "version": "0.1.0",
   "description": "A general purpose Discord bot",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node .",
     "build": "tsc",
     "test": "jest",
-    "watch": "npm run build && tsc -w",
-    "lint": "tslint 'src/**/*.ts' --format codeFrame"
+    "watch": "tsc -w",
+    "lint": "tslint 'src/**/*.ts' --format codeFrame",
+    "clean": "rm -rf dist/ coverage/"
   },
   "repository": {
     "type": "git",
