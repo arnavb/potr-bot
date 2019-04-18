@@ -32,8 +32,8 @@ export class PotrBot {
     this.db = new UsersDb(this.config.postgresDbUri, console.error);
     this.commands = new Discord.Collection();
 
-    this.client.once('ready', this.onceReady);
-    this.client.on('message', this.onMessage);
+    this.client.once('ready', this.onceReady.bind(this));
+    this.client.on('message', this.onMessage.bind(this));
   }
 
   public start() {
