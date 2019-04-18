@@ -16,7 +16,7 @@ interface ICommand {
   execute(message: Discord.Message, commandArgs: string[]): void;
 }
 
-export interface IBotConfig {
+interface IBotConfig {
   prefix: string;
   postgresDbUri: string;
   discordBotToken: string;
@@ -60,6 +60,8 @@ export class Bot {
     }
 
     if (message.channel.type === 'text') {
+      await this.db.createClient();
+
       const randomExpAmount = randInt(20, 30);
       if (await this.db.userExists(message.guild.id, message.author.id)) {
         await this.db.increaseUserExp(randomExpAmount, message.guild.id, message.author.id);
@@ -79,6 +81,8 @@ export class Bot {
           ),
         ]);
       }
+
+      await this.db.releaseClient();
     }
 
     if (
