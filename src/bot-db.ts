@@ -1,6 +1,6 @@
 import { Pool, PoolClient } from 'pg';
 
-export class UsersDb {
+export class BotDb {
   private pgPool: Pool;
 
   constructor(connectionUri: string, errorHandler: (err: Error, client: PoolClient) => void) {

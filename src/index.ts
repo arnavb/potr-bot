@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
-import { PotrBot } from './potr-bot';
+import { Bot } from './bot';
 config();
 
-const potrBot = new PotrBot({
+const potrBot = new Bot({
   prefix: '>>',
   discordBotToken: process.env.DISCORD_BOT_TOKEN!,
   postgresDbUri: process.env.POSTGRES_DB_URI!,

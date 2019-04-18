@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
 import { readdir as rd } from 'fs';
 import { promisify } from 'util';
-import { UsersDb } from './users-db';
+import { BotDb } from './bot-db';
 import { randInt } from './utils';
 const readdir = promisify(rd);
 
@@ -16,20 +16,20 @@ interface ICommand {
   execute(message: Discord.Message, commandArgs: string[]): void;
 }
 
-export interface IPotrBotConfig {
+export interface IBotConfig {
   prefix: string;
   postgresDbUri: string;
   discordBotToken: string;
 }
 
-export class PotrBot {
+export class Bot {
   private client: Discord.Client;
-  private db: UsersDb;
+  private db: BotDb;
   private commands: Discord.Collection<string, ICommand>;
 
-  constructor(private config: IPotrBotConfig) {
+  constructor(private config: IBotConfig) {
     this.client = new Discord.Client();
-    this.db = new UsersDb(this.config.postgresDbUri, console.error);
+    this.db = new BotDb(this.config.postgresDbUri, console.error);
     this.commands = new Discord.Collection();
 
     this.client.once('ready', this.onceReady.bind(this));
