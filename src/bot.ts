@@ -5,7 +5,7 @@ import { BotDb } from './bot-db';
 import { randInt } from './utils';
 const readdir = promisify(rd);
 
-interface ICommand {
+interface Command {
   name: string;
   description: string;
   usage?: string;
@@ -16,7 +16,7 @@ interface ICommand {
   execute(message: Discord.Message, commandArgs: string[]): void;
 }
 
-interface IBotConfig {
+interface BotConfig {
   prefix: string;
   postgresDbUri: string;
   discordBotToken: string;
@@ -25,9 +25,9 @@ interface IBotConfig {
 export class Bot {
   private client: Discord.Client;
   private db: BotDb;
-  private commands: Discord.Collection<string, ICommand>;
+  private commands: Discord.Collection<string, Command>;
 
-  constructor(private config: IBotConfig) {
+  constructor(private config: BotConfig) {
     this.client = new Discord.Client();
     this.db = new BotDb(this.config.postgresDbUri, console.error);
     this.commands = new Discord.Collection();
@@ -147,7 +147,7 @@ export class Bot {
   }
 
   private async loadAllCommands(commandsDir: string, commandGroups: string[]) {
-    const result = new Discord.Collection<string, ICommand>();
+    const result = new Discord.Collection<string, Command>();
 
     // For all directories in `commandGroups` (with `commandsDir` as root),
     // store all commands in `result`.
@@ -158,7 +158,7 @@ export class Bot {
         );
 
         for (const file of commandFiles) {
-          const commandObject: ICommand = require(`${__dirname}/${commandsDir}/${group}/${file}`);
+          const commandObject: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
           result.set(commandObject.name, commandObject);
         }
       } catch (err) {

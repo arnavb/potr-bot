@@ -6,7 +6,8 @@
     "prettier": true,
     "no-console": false,
     "object-literal-sort-keys": false,
-    "no-default-export": true
+    "no-default-export": true,
+    "interface-name": [true, "never-prefix"]
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }
