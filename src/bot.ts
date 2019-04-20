@@ -63,14 +63,11 @@ export class Bot {
       await this.db.createClient();
 
       const randomExpAmount = randInt(20, 30);
-      if (await this.db.userExists(message.guild.id, message.author.id)) {
-        await this.db.increaseUserExp(randomExpAmount, message.guild.id, message.author.id);
-      } else {
-        await this.db.createUser(message.guild.id, message.author.id, randomExpAmount);
-      }
 
-      const { exp, level } = (await this.db.getUserRows(message.guild.id, message.author.id))
-        .rows[0] as any;
+      await this.db.upsertUser(message.guild.id, message.author.id, randomExpAmount);
+
+      const { exp, level } = (await this.db.getUserRow(message.guild.id, message.author.id))
+        .row as any;
 
       // 100 exp required for each level. Will be changed later
       if (exp > level * 100) {

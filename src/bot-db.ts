@@ -33,31 +33,13 @@ export class BotDb {
     );
   }
 
-  public async getAllUsers() {
-    const { rows } = await this.executeQuery('SELECT * FROM users');
-    return rows;
-  }
-
-  public async getUserRows(guildId: string, userId: string) {
+  public async getUserRow(guildId: string, userId: string) {
     const { rows, rowCount } = await this.executeQuery(
       'SELECT * FROM users WHERE guild_id = $1 AND user_id = $2',
       guildId,
       userId,
     );
-    return { rows, rowCount };
-  }
-
-  public async userExists(guildId: string, userId: string) {
-    return (await this.getUserRows(guildId, userId)).rowCount === 1;
-  }
-
-  public async increaseUserExp(amount: number, guildId: string, userId: string) {
-    await this.executeQuery(
-      'UPDATE users SET exp = exp + $1 WHERE guild_id = $2 AND user_id = $3',
-      amount,
-      guildId,
-      userId,
-    );
+    return { row: rows[0], rowCount };
   }
 
   public async increaseUserLevel(guildId: string, userId: string) {
@@ -68,13 +50,15 @@ export class BotDb {
     );
   }
 
-  public async createUser(guildId: string, userId: string, defaultExp: number) {
-    await this.executeQuery(
-      'INSERT INTO users (guild_id, user_id, exp) VALUES ($1, $2, $3)',
-      guildId,
-      userId,
-      defaultExp,
-    );
+  public async upsertUser(guildId: string, userId: string, exp: number) {
+    const query = `
+      INSERT INTO users (guild_id, user_id, exp) VALUES
+        ($1, $2, $3)
+        ON CONFLICT (guild_id, user_id) DO
+          UPDATE SET
+            exp = users.exp + $3
+    `;
+    await this.executeQuery(query, guildId, userId, exp);
   }
 
   private async executeQuery(query: string, ...params: Array<string | number>) {
