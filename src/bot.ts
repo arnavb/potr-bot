@@ -5,7 +5,7 @@ import { BotDb } from './bot-db';
 import { randInt } from './utils';
 const readdir = promisify(rd);
 
-interface Command {
+export interface Command {
   name: string;
   description: string;
   usage?: string;
