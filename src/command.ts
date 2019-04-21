@@ -13,7 +13,7 @@ interface CommandDetails {
 export abstract class Command {
   constructor(protected commandDetails: CommandDetails, protected db: BotDb) {}
 
-  abstract async execute(
+  public abstract async execute(
     message: import('discord.js').Message,
     commandArgs: string[],
   ): Promise<void>;
