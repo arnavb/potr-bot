@@ -11,7 +11,7 @@ interface CommandDetails {
 }
 
 export abstract class Command {
-  constructor(protected commandDetails: CommandDetails, protected db: BotDb) {}
+  constructor(public details: CommandDetails, protected db: BotDb) {}
 
   public abstract async execute(
     message: import('discord.js').Message,

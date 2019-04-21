@@ -1,28 +1,38 @@
+import { Command } from '../../command';
 import { extractUserFrom } from '../../utils';
 
-export const name = 'unban';
-export const description = 'Unban a user';
-export const usage = '<user>';
-export const group = 'Moderation';
-export const requiredPermissions = ['BAN_MEMBERS'];
-export const guildOnly = true;
-
-export async function execute(message: import('discord.js').Message, commandArgs: string[]) {
-  // Verify a valid member is passed
-  const memberString = extractUserFrom(commandArgs[0]);
-
-  if (!memberString) {
-    await message.channel.send("You didn't specify anybody to unban!");
-    return;
+export default class UnbanCommand extends Command {
+  constructor(db: import('../../bot-db').BotDb) {
+    super(
+      {
+        name: 'ubban',
+        description: 'Unban a user',
+        group: 'Moderation',
+        usage: '<user>',
+        guildOnly: true,
+        requiredPermissions: ['BAN_MEMBERS'],
+      },
+      db,
+    );
   }
 
-  const userToUnban = await message.client.fetchUser(memberString);
+  public async execute(message: import('discord.js').Message, commandArgs: string[]) {
+    // Verify a valid member is passed
+    const memberString = extractUserFrom(commandArgs[0]);
 
-  if (!userToUnban) {
-    await message.channel.send('That user does not exist!');
-    return;
+    if (!memberString) {
+      await message.channel.send("You didn't specify anybody to unban!");
+      return;
+    }
+
+    const userToUnban = await message.client.fetchUser(memberString);
+
+    if (!userToUnban) {
+      await message.channel.send('That user does not exist!');
+      return;
+    }
+
+    await message.guild.unban(userToUnban);
+    await message.channel.send(`Successfully unbanned ${userToUnban}`);
   }
-
-  await message.guild.unban(userToUnban);
-  await message.channel.send(`Successfully unbanned ${userToUnban}`);
 }

@@ -5,16 +5,7 @@ import { BotDb } from './bot-db';
 import { randInt } from './utils';
 const readdir = promisify(rd);
 
-export interface Command {
-  name: string;
-  description: string;
-  usage?: string;
-  group: string;
-  requiredPermissions?: string[];
-  guildOnly: boolean;
-  aliases?: string[];
-  execute(message: Discord.Message, commandArgs: string[]): void;
-}
+import { Command } from './command';
 
 interface BotConfig {
   prefix: string;
@@ -71,12 +62,10 @@ export class Bot {
 
       // 100 exp required for each level. Will be changed later
       if (exp > level * 100) {
-        await Promise.all([
-          this.db.increaseUserLevel(message.guild.id, message.author.id),
-          message.channel.send(
-            `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
-          ),
-        ]);
+        await this.db.increaseUserLevel(message.guild.id, message.author.id);
+        await message.channel.send(
+          `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
+        );
       }
 
       await this.db.releaseClient();
@@ -96,7 +85,7 @@ export class Bot {
     const command =
       this.commands.get(commandName) ||
       this.commands.find(
-        cmd => cmd.hasOwnProperty('aliases') && cmd.aliases!.includes(commandName),
+        cmd => cmd.hasOwnProperty('aliases') && cmd.details.aliases!.includes(commandName),
       );
 
     // If command/aliases not found, return
@@ -105,30 +94,33 @@ export class Bot {
     }
 
     // Filter commands with wrong number of arguments
-    if (command.usage) {
-      const numberOfArgs = command.usage
+    if (command.details.usage) {
+      const numberOfArgs = command.details.usage
         .split(' ')
         .filter(arg => arg.startsWith('<') && arg.endsWith('>'));
       if (commandArgs.length < numberOfArgs.length) {
         await message.channel.send(
           `The command \`${commandName}\` expects ${numberOfArgs.length - commandArgs.length}` +
-            `more argument(s)!\n` +
-            `The correct usage would be \`${this.config.prefix}${commandName} ${command.usage}\``,
+            ` more argument(s)!\n` +
+            `The correct usage would be \`${this.config.prefix}${commandName} ${
+              command.details.usage
+            }\``,
         );
         return;
       }
     }
 
     // Filter guild-only commands
-    if (command.guildOnly && message.channel.type !== 'text') {
+    if (command.details.guildOnly && message.channel.type !== 'text') {
       await message.channel.send("I can't use that command in DMs!");
       return;
     }
 
     // Check if user has required permissions to run the command
     if (
-      command.requiredPermissions &&
-      !message.member.hasPermission(command.requiredPermissions as Discord.PermissionResolvable)
+      command.details.requiredPermissions &&
+      !message.member.hasPermission(command.details
+        .requiredPermissions as Discord.PermissionResolvable)
     ) {
       await message.channel.send("You don't have the required permissions to run this command!");
       return;
@@ -155,8 +147,13 @@ export class Bot {
         );
 
         for (const file of commandFiles) {
-          const commandObject: Command = require(`${__dirname}/${commandsDir}/${group}/${file}`);
-          result.set(commandObject.name, commandObject);
+          // Use default export to require each command class without having to deal
+          // with each command class having its own name (although this can be omitted with default exports)
+          // Hopefully another solution is possible without default exports
+          const commandClass = require(`${__dirname}/${commandsDir}/${group}/${file}`).default;
+
+          const commandObject: Command = new commandClass(this.db);
+          result.set(commandObject.details.name, commandObject);
         }
       } catch (err) {
         console.error(`Unable to load group ${group}. Error: ${err}`);
