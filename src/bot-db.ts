@@ -27,7 +27,7 @@ export class BotDb {
         guild_id VARCHAR (20) NOT NULL,
         user_id VARCHAR (20) NOT NULL,
         exp INTEGER NOT NULL,
-        level INTEGER DEFAULT 1,
+        level INTEGER DEFAULT 0,
         UNIQUE (guild_id, user_id)
       )`,
     );
