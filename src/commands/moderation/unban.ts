@@ -5,7 +5,7 @@ export default class UnbanCommand extends Command {
   constructor(db: import('../../bot-db').BotDb) {
     super(
       {
-        name: 'ubban',
+        name: 'unban',
         description: 'Unban a user',
         group: 'Moderation',
         usage: '<user>',
