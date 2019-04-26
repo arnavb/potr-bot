@@ -1,11 +1,12 @@
 import Discord from 'discord.js';
 import { readdir as rd } from 'fs';
 import { promisify } from 'util';
+import { Logger } from 'winston';
 import { BotDb } from './bot-db';
-import { randInt } from './utils';
-const readdir = promisify(rd);
-
 import { Command } from './command';
+import { randInt } from './utils';
+
+const readdir = promisify(rd);
 
 interface BotConfig {
   prefix: string;
@@ -13,21 +14,24 @@ interface BotConfig {
   discordBotToken: string;
   commandsDir: string;
   commandGroups: string[];
+  logger: Logger;
 }
 
 export class Bot {
   private client: Discord.Client;
   private db: BotDb;
   private commands: Discord.Collection<string, Command>;
+  private logger: Logger;
 
   constructor(private config: BotConfig) {
+    this.logger = this.config.logger;
     this.client = new Discord.Client();
-    this.db = new BotDb(this.config.postgresDbUri, console.error);
+    this.db = new BotDb(this.config.postgresDbUri, this.logger.error);
     this.commands = new Discord.Collection();
 
     this.client.once('ready', this.onceReady.bind(this));
     this.client.on('message', this.onMessage.bind(this));
-    this.client.on('error', console.error);
+    this.client.on('error', this.logger.error);
   }
 
   public start() {
@@ -35,10 +39,14 @@ export class Bot {
   }
 
   private async onceReady() {
-    console.log(`Logging in with ${this.client.user.username}#${this.client.user.discriminator}`);
+    this.logger.info(
+      `Logging in with ${this.client.user.username}#${this.client.user.discriminator}`,
+    );
 
     // Setup database
     await this.db.initialize();
+
+    this.logger.info('Initialized database');
 
     try {
       this.commands = await this.loadAllCommands(
@@ -46,7 +54,7 @@ export class Bot {
         this.config.commandGroups,
       );
     } catch (err) {
-      console.error(`Unable to load groups. Error: ${err}`);
+      this.logger.error(`Unable to load groups. Error: ${err.stack}`);
     }
   }
 
@@ -104,6 +112,7 @@ export class Bot {
       const numberOfArgs = command.details.usage
         .split(' ')
         .filter(arg => arg.startsWith('<') && arg.endsWith('>'));
+
       if (commandArgs.length < numberOfArgs.length) {
         await message.channel.send(
           `The command \`${commandName}\` expects ${numberOfArgs.length - commandArgs.length}` +
@@ -137,7 +146,7 @@ export class Bot {
     } catch (err) {
       // TODO: Better error handling
       await message.channel.send('An error occurred while running this command!');
-      console.error(`An error occurred! ${err}`);
+      this.logger.error(`An error occurred! ${err.stack}`);
     }
   }
 
@@ -162,7 +171,7 @@ export class Bot {
           result.set(commandObject.details.name, commandObject);
         }
       } catch (err) {
-        console.error(`Unable to load group ${group}. Error: ${err}`);
+        this.logger.error(`Unable to load group ${group}. Error: ${err.stack}`);
       }
     }
 
