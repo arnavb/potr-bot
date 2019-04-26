@@ -11,6 +11,8 @@ interface BotConfig {
   prefix: string;
   postgresDbUri: string;
   discordBotToken: string;
+  commandsDir: string;
+  commandGroups: string[];
 }
 
 export class Bot {
@@ -38,7 +40,10 @@ export class Bot {
     await this.db.initialize();
 
     try {
-      this.commands = await this.loadAllCommands('commands', ['general', 'moderation']);
+      this.commands = await this.loadAllCommands(
+        this.config.commandsDir,
+        this.config.commandGroups,
+      );
     } catch (err) {
       console.error(`Unable to load groups. Error: ${err}`);
     }
