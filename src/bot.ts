@@ -27,6 +27,7 @@ export class Bot {
 
     this.client.once('ready', this.onceReady.bind(this));
     this.client.on('message', this.onMessage.bind(this));
+    this.client.on('error', console.error);
   }
 
   public start() {
@@ -88,7 +89,7 @@ export class Bot {
 
     // Try to get command by primary name, otherwise check aliases
     const command =
-      this.commands.get(commandName) ||
+      this.commands.find(cmd => cmd.details.name === commandName) ||
       this.commands.find(
         cmd => cmd.hasOwnProperty('aliases') && cmd.details.aliases!.includes(commandName),
       );
