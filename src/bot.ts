@@ -26,7 +26,7 @@ export class Bot {
   constructor(private config: BotConfig) {
     this.logger = this.config.logger;
     this.client = new Discord.Client();
-    this.db = new BotDb(this.config.postgresDbUri, this.logger.error);
+    this.db = new BotDb(this.config.postgresDbUri, this.dbErrorHandler.bind(this));
     this.commands = new Discord.Collection();
 
     this.client.once('ready', this.onceReady.bind(this));
@@ -38,13 +38,23 @@ export class Bot {
     this.client.login(this.config.discordBotToken);
   }
 
+  private dbErrorHandler(error: Error) {
+    this.logger.error('DB Error! (%s)', error);
+  }
+
   private async onceReady() {
     this.logger.info(
       `Logging in with ${this.client.user.username}#${this.client.user.discriminator}`,
     );
 
-    // Setup database
-    await this.db.initialize();
+    try {
+      // Setup database
+      await this.db.initialize();
+    } catch (err) {
+      await this.client.destroy();
+      this.logger.error('Fatal! Failed to connect to DB! (%s)', err);
+      return;
+    }
 
     this.logger.info('Initialized database');
 
@@ -54,7 +64,7 @@ export class Bot {
         this.config.commandGroups,
       );
     } catch (err) {
-      this.logger.error(`Unable to load groups. Error: ${err.stack}`);
+      this.logger.error('Unable to load groups! (%s)', err);
     }
   }
 
@@ -146,7 +156,7 @@ export class Bot {
     } catch (err) {
       // TODO: Better error handling
       await message.channel.send('An error occurred while running this command!');
-      this.logger.error(`An error occurred! ${err.stack}`);
+      this.logger.error('An error occurred! (%s)', err);
     }
   }
 
@@ -171,7 +181,7 @@ export class Bot {
           result.set(commandObject.details.name, commandObject);
         }
       } catch (err) {
-        this.logger.error(`Unable to load group ${group}. Error: ${err.stack}`);
+        this.logger.error('Unable to load group %s. (%s)', group, err);
       }
     }
 

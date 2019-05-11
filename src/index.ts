@@ -22,7 +22,17 @@ const logger = createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
-      format: format.combine(format.colorize(), format.simple()),
+      format: format.combine(
+        format(info => {
+          info.level = info.level.padEnd(5);
+          return info;
+        })(),
+        format.colorize(),
+        format.printf(({ timestamp, level, message, meta }) => {
+          const metaString = meta === undefined ? '' : meta;
+          return `${timestamp} ${level} - ${message} ${metaString}`;
+        }),
+      ),
     }),
   );
 }

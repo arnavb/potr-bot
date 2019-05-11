@@ -36,7 +36,7 @@ export class BotDb {
 
   public async getUserRow(guildId: string, userId: string) {
     const { rows, rowCount } = await this.executeQuery(
-      SQL`SELECT * FROM users WHERE guild_id = ${guildId} AND user_id = ${userId}`,
+      SQL`SELECT * FRO users WHERE guild_id = ${guildId} AND user_id = ${userId}`,
     );
     return { row: rows[0], rowCount };
   }
