@@ -31,15 +31,29 @@ export class Bot {
 
     this.client.once('ready', this.onceReady.bind(this));
     this.client.on('message', this.onMessage.bind(this));
-    this.client.on('error', this.logger.error);
+    this.client.on('disconnect', this.onDisconnect.bind(this));
+    this.client.on('error', this.clientErrorHandler.bind(this));
   }
 
-  public start() {
-    this.client.login(this.config.discordBotToken);
+  public async start() {
+    try {
+      await this.client.login(this.config.discordBotToken);
+    } catch (err) {
+      this.logger.error('Fatal! Unknown Error: ', err);
+    }
   }
 
-  private dbErrorHandler(error: Error) {
-    this.logger.error('DB Error! (%s)', error);
+  // Websocket error handler
+  private clientErrorHandler(err: any) {
+    this.logger.error('Client Error: ', err.error);
+  }
+
+  private dbErrorHandler(err: Error) {
+    this.logger.error('DB Error: ', err);
+  }
+
+  private async onDisconnect() {
+    this.logger.info('Logging off the bot!');
   }
 
   private async onceReady() {
@@ -51,9 +65,8 @@ export class Bot {
       // Setup database
       await this.db.initialize();
     } catch (err) {
-      await this.client.destroy();
-      this.logger.error('Fatal! Failed to connect to DB! (%s)', err);
-      return;
+      this.logger.error('Fatal! Failed to connect to DB: ', err);
+      process.exit(1);
     }
 
     this.logger.info('Initialized database');
@@ -64,7 +77,8 @@ export class Bot {
         this.config.commandGroups,
       );
     } catch (err) {
-      this.logger.error('Unable to load groups! (%s)', err);
+      this.logger.error('Fatal! Unable to load groups: ', err);
+      process.exit(1);
     }
   }
 
@@ -156,7 +170,7 @@ export class Bot {
     } catch (err) {
       // TODO: Better error handling
       await message.channel.send('An error occurred while running this command!');
-      this.logger.error('An error occurred! (%s)', err);
+      this.logger.error("An error occurred executing the message '%s': ", message, err);
     }
   }
 
@@ -181,7 +195,7 @@ export class Bot {
           result.set(commandObject.details.name, commandObject);
         }
       } catch (err) {
-        this.logger.error('Unable to load group %s. (%s)', group, err);
+        this.logger.error('Unable to load group %s: ', group, err);
       }
     }
 
