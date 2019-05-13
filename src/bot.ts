@@ -39,6 +39,9 @@ export class Bot {
     try {
       await this.client.login(this.config.discordBotToken);
     } catch (err) {
+      // This exception handler doesn't catch `UnhandledPromiseRejectionWarning`s
+      // because the code that calls each event callback doesn't handle
+      // promise rejections (https://stackoverflow.com/q/56094829/6525260)
       this.logger.error('Fatal! Unknown Error: ', err);
     }
   }
