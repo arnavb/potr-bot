@@ -31,7 +31,6 @@ export class Bot {
 
     this.client.once('ready', this.onceReady.bind(this));
     this.client.on('message', this.onMessage.bind(this));
-    this.client.on('disconnect', this.onDisconnect.bind(this));
     this.client.on('error', this.clientErrorHandler.bind(this));
   }
 
@@ -42,7 +41,8 @@ export class Bot {
       // This exception handler doesn't catch `UnhandledPromiseRejectionWarning`s
       // because the code that calls each event callback doesn't handle
       // promise rejections (https://stackoverflow.com/q/56094829/6525260)
-      this.logger.error('Fatal! Unknown Error: ', err);
+      this.logger.error('Unknown Error: ', err);
+      process.exit(1);
     }
   }
 
@@ -53,10 +53,6 @@ export class Bot {
 
   private dbErrorHandler(err: Error) {
     this.logger.error('DB Error: ', err);
-  }
-
-  private async onDisconnect() {
-    this.logger.info('Logging off the bot!');
   }
 
   private async onceReady() {
