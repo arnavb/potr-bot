@@ -16,7 +16,7 @@ export default class HelloCommand extends Command {
 
   public async execute(message: import('discord.js').Message, commandArgs: string[]) {
     if (commandArgs.length === 0) {
-      await message.channel.send(`Hello, ${message.author.username}!`);
+      await message.channel.send(`Hello, ${message.author}!`);
     } else {
       await message.channel.send(`Hello, ${commandArgs.join(' ')}!`);
     }

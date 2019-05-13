@@ -88,24 +88,28 @@ export class Bot {
     }
 
     if (message.channel.type === 'text') {
-      await this.db.createClient();
+      try {
+        await this.db.createClient();
 
-      const randomExpAmount = randInt(20, 30);
+        const randomExpAmount = randInt(20, 30);
 
-      await this.db.upsertUser(message.guild.id, message.author.id, randomExpAmount);
+        await this.db.upsertUser(message.guild.id, message.author.id, randomExpAmount);
 
-      const { exp, level } = (await this.db.getUserRow(message.guild.id, message.author.id))
-        .row as any;
+        const { exp, level } = (await this.db.getUserRow(message.guild.id, message.author.id))
+          .row as any;
 
-      // 100 exp required for each level. Will be changed later
-      if (exp > level * 100) {
-        await this.db.increaseUserLevel(message.guild.id, message.author.id);
-        await message.channel.send(
-          `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
-        );
+        // 100 exp required for each level. Will be changed later
+        if (exp > level * 100) {
+          await this.db.increaseUserLevel(message.guild.id, message.author.id);
+          await message.channel.send(
+            `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
+          );
+        }
+
+        await this.db.releaseClient();
+      } catch (err) {
+        this.logger.error('DB exp and level operations failed: ', err);
       }
-
-      await this.db.releaseClient();
     }
 
     if (
@@ -118,14 +122,20 @@ export class Bot {
     const commandArgs = message.content.slice(this.config.prefix.length).split(/ +/);
     const commandName = commandArgs.shift() || '';
 
-    // Try to get command by primary name, otherwise check aliases
-    const command =
-      this.commands.find(cmd => cmd.details.name === commandName) ||
-      this.commands.find(
-        cmd => cmd.hasOwnProperty('aliases') && cmd.details.aliases!.includes(commandName),
-      );
+    const command = this.commands.find(cmd => {
+      // Try to get command by primary name
+      if (cmd.details.name === commandName) {
+        return true;
+      }
 
-    // If command/aliases not found, return
+      // Check aliases
+      if (cmd.details.aliases && cmd.details.aliases.includes(commandName)) {
+        return true;
+      }
+      return false;
+    });
+
+    // Make sure command/aliases were found
     if (!command) {
       return;
     }
@@ -167,8 +177,7 @@ export class Bot {
     try {
       await command.execute(message, commandArgs);
     } catch (err) {
-      // TODO: Better error handling
-      await message.channel.send('An error occurred while running this command!');
+      await message.channel.send('Sorry! An error occurred while running this command!');
       this.logger.error("An error occurred executing the message '%s': ", message, err);
     }
   }
