@@ -178,7 +178,7 @@ export class Bot {
       await command.execute(message, commandArgs);
     } catch (err) {
       await message.channel.send('Sorry! An error occurred while running this command!');
-      this.logger.error("An error occurred executing the message '%s': ", message, err);
+      this.logger.error("An error occurred executing the message '%s': ", commandName, err);
     }
   }
 

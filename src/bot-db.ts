@@ -30,6 +30,7 @@ export class BotDb {
         user_id VARCHAR (20) NOT NULL,
         exp INTEGER NOT NULL,
         level INTEGER DEFAULT 0,
+        infractions TEXT [],
         UNIQUE (guild_id, user_id)
       )`,
     );
@@ -45,6 +46,13 @@ export class BotDb {
   public async increaseUserLevel(guildId: string, userId: string) {
     await this.executeQuery(
       SQL`UPDATE users SET level = level + 1 WHERE guild_id = ${guildId} AND user_id = ${userId}`,
+    );
+  }
+
+  public async addUserInfraction(guildId: string, userId: string, infraction: string) {
+    await this.executeQuery(
+      SQL`UPDATE users SET infractions = array_append(infractions, ${infraction})
+        WHERE guild_id = ${guildId} AND user_id = ${userId}`,
     );
   }
 
