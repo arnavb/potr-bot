@@ -150,9 +150,7 @@ export class Bot {
         await message.channel.send(
           `The command \`${commandName}\` expects ${numberOfArgs.length - commandArgs.length}` +
             ` more argument(s)!\n` +
-            `The correct usage would be \`${this.config.prefix}${commandName} ${
-              command.details.usage
-            }\``,
+            `The correct usage would be \`${this.config.prefix}${commandName} ${command.details.usage}\``,
         );
         return;
       }
