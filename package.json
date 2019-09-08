@@ -23,7 +23,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@types/dotenv": "^6.1.0",
-    "@types/ms": "^0.7.30",
+    "@types/ms": "^0.7.31",
     "@types/node": "^12.7.4",
     "@types/pg": "^7.11.1",
     "discord.js": "^11.5.1",
