@@ -27,7 +27,7 @@
     "@types/node": "^12.7.4",
     "@types/pg": "^7.11.1",
     "discord.js": "^11.5.1",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "ms": "^2.1.2",
     "pg": "^7.12.1",
     "sql-template-strings": "^2.2.2",
