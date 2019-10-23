@@ -24,24 +24,26 @@
   "dependencies": {
     "@types/dotenv": "^6.1.0",
     "@types/ms": "^0.7.31",
-    "@types/node": "^12.7.4",
+    "@types/node": "^12.11.5",
     "@types/pg": "^7.11.1",
     "discord.js": "^11.5.1",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "ms": "^2.1.2",
     "pg": "^7.12.1",
     "sql-template-strings": "^2.2.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.19",
     "coveralls": "^3.0.6",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "ts-jest": "^24.1.0",
-    "tslint": "^5.19.0",
+    "tslint": "^5.20.0",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.4"
   }
 }
