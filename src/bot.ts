@@ -165,8 +165,9 @@ export class Bot {
     // Check if user has required permissions to run the command
     if (
       command.details.requiredPermissions &&
-      !message.member.hasPermission(command.details
-        .requiredPermissions as Discord.PermissionResolvable)
+      !message.member.hasPermission(
+        command.details.requiredPermissions as Discord.PermissionResolvable,
+      )
     ) {
       await message.channel.send("You don't have the required permissions to run this command!");
       return;
