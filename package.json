@@ -24,7 +24,7 @@
   "dependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/ms": "^0.7.31",
-    "@types/node": "^13.7.2",
+    "@types/node": "^13.7.4",
     "@types/pg": "^7.14.1",
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
