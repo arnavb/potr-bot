@@ -25,7 +25,7 @@ export default class KickCommand extends Command {
       return;
     }
 
-    const memberToBan = message.guild.member(memberString);
+    const memberToBan = message.guild!.member(memberString);
 
     if (!memberToBan) {
       await message.channel.send('That user does not exist or is not on the server!');

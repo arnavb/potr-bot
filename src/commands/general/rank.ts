@@ -15,12 +15,12 @@ export default class RankCommand extends Command {
   }
 
   public async execute(message: Discord.Message, _: string[]) {
-    const { row } = await this.db.getUserRow(message.guild.id, message.author.id);
+    const { row } = await this.db.getUserRow(message.guild!.id, message.author.id);
 
-    const rankEmbed = new Discord.RichEmbed()
+    const rankEmbed = new Discord.MessageEmbed()
       .setColor('#4fa636')
       .setTitle(`@${message.author.username}'s rank!`)
-      .setThumbnail(message.author.displayAvatarURL)
+      .setThumbnail(message.author.displayAvatarURL())
       .addField('Level', row.level, true)
       .addField('Exp', `${row.exp} XP`, true)
       .setTimestamp();

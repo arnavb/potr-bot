@@ -25,14 +25,14 @@ export default class UnbanCommand extends Command {
       return;
     }
 
-    const userToUnban = await message.client.fetchUser(memberString);
+    const userToUnban = await message.client.users.fetch(memberString);
 
     if (!userToUnban) {
       await message.channel.send('That user does not exist!');
       return;
     }
 
-    await message.guild.unban(userToUnban);
+    await message.guild!.members.unban(userToUnban);
     await message.channel.send(`Successfully unbanned ${userToUnban}`);
   }
 }

@@ -25,7 +25,7 @@ export default class BanCommand extends Command {
       return;
     }
 
-    const userToBan = await message.client.fetchUser(memberString);
+    const userToBan = await message.client.users.fetch(memberString);
 
     if (!userToBan) {
       await message.channel.send('That user does not exist!');
@@ -38,8 +38,8 @@ export default class BanCommand extends Command {
       reason = commandArgs.slice(1).join(' ');
     }
 
-    await message.guild.ban(userToBan, reason);
+    await message.guild!.members.ban(userToBan, { reason });
     await message.channel.send(`Successfully banned ${userToBan} for ${reason}`);
-    userToBan.send(`Hey! You were banned from ${message.guild.name} for ${reason}`);
+    userToBan.send(`Hey! You were banned from ${message.guild!.name} for ${reason}`);
   }
 }

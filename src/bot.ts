@@ -57,7 +57,7 @@ export class Bot {
 
   private async onceReady() {
     this.logger.info(
-      `Logging in with ${this.client.user.username}#${this.client.user.discriminator}`,
+      `Logging in with ${this.client.user!.username}#${this.client.user!.discriminator}`,
     );
 
     try {
@@ -93,14 +93,14 @@ export class Bot {
 
         const randomExpAmount = randInt(20, 30);
 
-        await this.db.upsertUser(message.guild.id, message.author.id, randomExpAmount);
+        await this.db.upsertUser(message.guild!.id, message.author.id, randomExpAmount);
 
-        const { exp, level } = (await this.db.getUserRow(message.guild.id, message.author.id))
+        const { exp, level } = (await this.db.getUserRow(message.guild!.id, message.author.id))
           .row as any;
 
         // 100 exp required for each level. Will be changed later
         if (exp > level * 100) {
-          await this.db.increaseUserLevel(message.guild.id, message.author.id);
+          await this.db.increaseUserLevel(message.guild!.id, message.author.id);
           await message.channel.send(
             `Congratulations ${message.author}! You've leveled up to level ${level + 1}`,
           );
@@ -165,7 +165,7 @@ export class Bot {
     // Check if user has required permissions to run the command
     if (
       command.details.requiredPermissions &&
-      !message.member.hasPermission(
+      !message.member!.hasPermission(
         command.details.requiredPermissions as Discord.PermissionResolvable,
       )
     ) {

@@ -26,7 +26,7 @@ export default class MuteCommand extends Command {
       return;
     }
 
-    const memberToMute = message.guild.member(memberString);
+    const memberToMute = message.guild!.member(memberString);
 
     if (!memberToMute) {
       await message.channel.send("That user isn't in this server or does not exist!");
@@ -39,22 +39,19 @@ export default class MuteCommand extends Command {
       return;
     }
 
-    let mutedRole = message.guild.roles.find(role => role.name === 'Muted');
+    let mutedRole = message.guild!.roles.cache.find(role => role.name === 'Muted');
 
     // Create muted role if it doesn't exist already
     if (!mutedRole) {
       try {
-        mutedRole = await message.guild.createRole({
-          color: '#808080',
-          name: 'Muted',
-          permissions: [],
+        mutedRole = await message.guild!.roles.create({
+          data: { color: '#808080', name: 'Muted', permissions: [] },
         });
 
-        for (const [, channel] of message.guild.channels) {
-          await channel.overwritePermissions(mutedRole, {
-            ADD_REACTIONS: false,
-            SEND_MESSAGES: false,
-          });
+        for (const [, channel] of message.guild!.channels.cache) {
+          await channel.overwritePermissions([
+            { id: mutedRole, deny: ['ADD_REACTIONS', 'SEND_MESSAGES'] },
+          ]);
         }
       } catch (err) {
         await message.channel.send("Unable to create a 'Muted' role!");
@@ -62,13 +59,13 @@ export default class MuteCommand extends Command {
       }
     }
 
-    if (memberToMute.roles.has(mutedRole.id)) {
+    if (memberToMute.roles.cache.has(mutedRole.id)) {
       await message.channel.send(`${memberToMute} is already muted!`);
       return;
     }
 
     // Mute user and respond on Discord
-    await memberToMute.addRole(mutedRole);
+    await memberToMute.roles.add(mutedRole);
 
     // If a time period is specified, do a tempmute
     if (commandArgs.length > 1) {
@@ -78,7 +75,7 @@ export default class MuteCommand extends Command {
         `${memberToMute} was muted for ${ms(ms(timePeriod), { long: true })}!`,
       );
       setTimeout(async () => {
-        await memberToMute.removeRole(mutedRole);
+        await memberToMute.roles.remove(mutedRole!);
         await message.channel.send(
           `${memberToMute} was unmuted after ${ms(ms(timePeriod), { long: true })}!`,
         );

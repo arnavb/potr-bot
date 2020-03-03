@@ -21,7 +21,7 @@ export default class WarnCommand extends Command {
       return;
     }
 
-    const memberToWarn = message.guild.member(memberString);
+    const memberToWarn = message.guild!.member(memberString);
 
     if (!memberToWarn) {
       await message.channel.send("That user isn't in this server or does not exist!");
@@ -41,7 +41,7 @@ export default class WarnCommand extends Command {
 
     const reason = commandArgs.slice(1).join(' ');
 
-    await this.db.addUserInfraction(message.guild.id, message.author.id, `Warned for ${reason}`);
+    await this.db.addUserInfraction(message.guild!.id, message.author.id, `Warned for ${reason}`);
     await message.channel.send(`${memberToWarn} was warned for ${reason}`);
   }
 }
